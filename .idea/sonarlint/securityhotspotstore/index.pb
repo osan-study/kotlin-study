@@ -1,0 +1,33 @@
+
+[
++src/main/kotlin/chapter1/HyunJunSon/ch01.md,f/6/f6ef4fad7652ce0f4e7a2d634983e4164aa78db3
+h
+8src/main/kotlin/chapter1/moonggae/atomic02/why_kotlin.md,f/c/fc13e64cf59bb6b6deb3ac252ac8423b90f8dcb8
+R
+"src/main/kotlin/chapter2/README.md,7/3/737d7eb86fab20b5603b5ef6b773c8b0898434cf
+P
+ src/main/kotlin/chapter2/ch02.md,5/a/5a496b436b020adb4c391b51016dc77e45cf0ec6
+P
+ src/main/kotlin/chapter2/ch02.kt,8/9/8902faadcb1e0539c15975f6131f3a683a4d0425
+9
+	README.md,8/e/8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
+7
+gradlew,5/b/5bbfa66edb4db3c7c33c5181f43510990d3307f9
+@
+build.gradle.kts,d/b/dbcff70658daf80b53ce624f6adcaa529df5ed8d
+[
++src/main/kotlin/chapter2/HyunJunSon/ch02.kt,9/d/9d8b8b0910ac63e7423efe5e3ba29ca33079dd11
+[
++src/main/kotlin/chapter2/HyunJunSon/ch02.md,9/4/949cb0dff5b58a1cc2013d7c98627a0e362fa555
+k
+;src/main/kotlin/chapter1/moonggae/atomic04/AVarIsMutable.kt,4/6/46fa8b9ce7e9c5cfaedfcc5f784644aa318ce721
+b
+2src/main/kotlin/chapter1/moonggae/atomic04/Vals.kt,7/a/7a1ff09532dbb8cebe254216a0048de67a6ea36d
+b
+2src/main/kotlin/chapter1/moonggae/atomic04/Vars.kt,d/7/d7cdd973c0a3e6128497d4cc54aa9fb17cba4b08
+g
+7src/main/kotlin/chapter1/moonggae/atomic05/Inference.kt,7/2/72bf7d2794bc57c217c701509a3d4033e259d25d
+n
+>src/main/kotlin/chapter1/moonggae/atomic05/StringPlusNumber.kt,3/4/34d9d46183a632f14231c62fc429afa9495c6740
+l
+<src/main/kotlin/chapter1/moonggae/atomic06/MultiplyByFour.kt,4/0/408d57d9255dc9a5ad901ce2ca67eeebc084a5ee
