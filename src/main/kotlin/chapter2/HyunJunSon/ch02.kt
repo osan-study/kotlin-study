@@ -26,11 +26,12 @@ package chapter2.HyunJunSon
 //}
 
 fun main() {
-    val ints = listOf(99,23,4,6734,234);
-    val sortedList = ints.sorted()
-    println(sortedList)
-    println(ints)
-    println(ints.reversed())
-    println(ints)
+
+//    val ints = listOf(99,23,4,6734,234);
+//    val sortedList = ints.sorted()
+//    println(sortedList)
+//    println(ints)
+//    println(ints.reversed())
+//    println(ints)
 }
 

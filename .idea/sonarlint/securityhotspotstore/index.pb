@@ -31,3 +31,14 @@ n
 >src/main/kotlin/chapter1/moonggae/atomic05/StringPlusNumber.kt,3/4/34d9d46183a632f14231c62fc429afa9495c6740
 l
 <src/main/kotlin/chapter1/moonggae/atomic06/MultiplyByFour.kt,4/0/408d57d9255dc9a5ad901ce2ca67eeebc084a5ee
+e
+5src/main/kotlin/chapter1/samuel/src/1_04_VarAndVal.kt,8/a/8ae1d0fc0f0d5b64aeae6e438e21a9c6df443fd9
+d
+4src/main/kotlin/chapter1/samuel/src/1_05_DataType.kt,5/4/546c371a839825a123c55841bdc78b58eb5b38e6
+c
+3src/main/kotlin/chapter1/samuel/src/1_10_Boolean.kt,4/2/42a4e6f3fc28b8bdba8fcce07e8acf3eef25e202
+h
+8src/main/kotlin/chapter1/samuel/src/1_12_LoofAndRange.kt,e/2/e22278e0013150c17510b63393eb1c09afd51983
+:
+
+.gitignore,a/5/a5cc2925ca8258af241be7e5b0381edf30266302
