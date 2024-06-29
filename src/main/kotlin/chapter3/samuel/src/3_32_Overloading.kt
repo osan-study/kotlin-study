@@ -7,7 +7,7 @@ class My {
     fun foo() = 0
 }
 
-fun My.foo() = 1            // 오버로딩 되지 않음
+fun My.foo() = 1            // 오버라이딩 되지 않음
 fun My.foo(i: Int) = i + 2
 
 fun f(n: Int = 0) = n + 373
