@@ -485,3 +485,20 @@ package chapter3.HyunJunSon
 //    }
 //    println("Done with forEach")
 //}
+
+
+data class Tuple(
+    val i : Int,
+    val d : Double,
+    val s : String,
+    val b : Boolean,
+    val l : List<Int>
+)
+
+fun main() {
+    val tuple = Tuple(1, 10.2, "HI",true,listOf(1,2,3))
+    val (a,b,c,d,e) = tuple
+    println("$a $b $c $d $e")
+    val (_,_,hello) = tuple
+    println(hello)
+}
