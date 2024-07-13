@@ -53,7 +53,25 @@ fun main() {
         Message("Sam", "hey!", true)
     )
 
+    val sortedReverse = sorted.reversed()
+
     println("messages2.sortedWith(compareBy(Message::isRead, Message::sender)) == sorted: ${messages2.sortedWith(compareBy(Message::isRead, Message::sender)) == sorted}")
+
+    println("messages2.sortedWith(compareBy(Message::isRead, Message::sender)) == sorted: ${messages2.sortedWith(compareBy(Message::isRead, Message::sender)) == sorted}")
+
+    messages2.sortedWith (compareBy({it.isRead}, {it.sender})).asReversed()
+
+    println("====================================")
+    println(messages2.sortedWith(compareBy(Message::isRead, Message::sender)))
+    println(messages2.sortedWith( { p1, p2 ->
+        val com1 = p1.isRead.compareTo(p2.isRead)
+        if (com1 == 0) {
+            -p1.sender.compareTo(p2.sender)
+        } else {
+            -com1
+        }
+    }))
+    println("==============================")
 
     val message3 = listOf(
         Message2("Bob", "let's discuss goals for next year", false, listOf(Attachment("image", "cute cats")))

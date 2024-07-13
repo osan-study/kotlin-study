@@ -46,13 +46,20 @@ fun generateSequence1() {
 }
 
 fun generateSequence2() {
-    val items = mutableListOf(
+    var items = mutableListOf(
         "first", "second", "third", "XXX", "4th"
     )
     val seq = generateSequence {
-        items.removeAt(0).takeIf { it != "XXX" } // null 반환시 종료
+        val tem = items
+        tem.removeAt(0).takeIf { it != "XXX" } // null 반환시 종료
     }
 
+
+    println("seq.toList(): ${seq.toList()}")
+//    items = mutableListOf(
+//        "first", "second", "third", "XXX", "4th"
+//    )
+//    println(items)
     println("seq.toList(): ${seq.toList()}")
 }
 

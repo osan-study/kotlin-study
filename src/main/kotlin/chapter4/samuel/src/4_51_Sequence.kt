@@ -10,4 +10,5 @@ fun main() {
     println("mid2.any { it < 10 }: $mid3")
 
     println("list.asSequence().filter { it % 2 == 0 } .map { it * it } .any { it < 10 }} == true: ${list.asSequence().filter { it % 2 == 0 } .map { it * it } .any { it < 10 }}}")
+
 }
