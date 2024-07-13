@@ -11,8 +11,9 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.10")
-    implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.10")
+
+    implementation(kotlin("stdlib"))
+    implementation(kotlin("reflect"))
 }
 
 tasks.test {
