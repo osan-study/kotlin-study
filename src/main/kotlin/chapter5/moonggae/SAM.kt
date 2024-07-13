@@ -2,6 +2,7 @@ package chapter5.moonggae
 
 fun interface Adder {
     fun add(number1: Int, number2: Int): Int
+    fun add2() = 4 // 구현된 함수 정의 가능
 }
 
 class Calculator(
