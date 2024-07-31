@@ -268,6 +268,7 @@ fun main() {
 내포된 이넘
 - Enum은 함수에 내포시킬 수 없음
 - Enum은 다른 클래스를 상속할 수 없음
+  - interface 상속 가능
 - [코드 참조](nested/Ticket.kt)
 
 
