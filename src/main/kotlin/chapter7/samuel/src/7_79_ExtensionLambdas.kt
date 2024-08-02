@@ -1,0 +1,202 @@
+
+val va: (String, Int) -> String = { str, n ->
+    str.repeat(n) + str.repeat(n)
+}
+
+val vb: String.(Int) -> String = {
+    this.repeat(it) + repeat(it)
+}
+
+val zero: Int.() -> Boolean = {
+    this == 0
+}
+
+val one: Int.(Int) -> Boolean = {
+    this % it == 0
+}
+
+val two: Int.(Int, Int) -> Boolean = {
+    arg1, arg2 ->
+    this % (arg1 + arg2) == 0
+}
+
+val three: Int.(Int, Int, Int) -> Boolean = {
+    arg1, arg2, arg3 ->
+    this % (arg1 + arg2 + arg3) == 0
+}
+
+class A79 {
+    fun af() = 1
+}
+
+class B79 {
+    fun bf() = 1
+}
+
+fun f1(lambda: (A79, B79) -> Int) = lambda(A79(), B79())
+
+fun f2(lambda: A79.(B79) -> Int) = A79().lambda(B79())
+
+fun unitReturn(lambda: A79.() -> Unit) = A79().lambda()
+
+fun nonUnitReturn(lambda: A79.() -> String) = A79().lambda()
+
+
+fun String.transform1(
+    n: Int, lambda: (String, Int) -> String
+) = lambda(this, n)
+
+fun String.transform2(
+    n: Int, lambda: String.(Int) -> String
+) = lambda(this, n)
+
+val duplicate: String.(Int) -> String = {
+    repeat(it)
+}
+
+val alternate: String.(Int) -> String = {
+    toCharArray()
+        .filterIndexed { i, _ -> i % it == 0 }
+        .joinToString("")
+}
+
+fun Int.d1(f: (Int) -> Int) = f(this) * 10
+
+fun Int.d2(f: Int.() -> Int) = f() * 10
+
+fun f1(n: Int) = n + 3
+
+fun Int.f2() = this + 3
+
+open class Base79 {
+    open fun f() = 1
+}
+
+class Derived79 : Base79() {
+    override fun f() = 99
+}
+
+fun Base79.g() = f()
+
+fun Base79.h(xl: Base79.() -> Int) = xl()
+
+fun exec (
+    arg1: Int, arg2: Int,
+    f: Int.(Int) -> Boolean
+) = arg1.f(arg2)
+
+private fun messy(): String {
+    val built = StringBuilder()
+    built.append("ABCs: ")
+    ('a'..'z').forEach { built.append(it) }
+    return built.toString()
+}
+
+private fun clean() = buildString {
+    append("ABCs: ")
+    ('a'..'z').forEach { append(it) }
+}
+
+private fun cleaner() = ('a'..'z').joinToString("", "ABCs: ")
+
+
+fun main() {
+    println("va(\"Vanbo\", 2): ${va("Vanbo", 2)}")
+    println("\"Vanbo\".vb(2): ${"Vanbo".vb(2)}")
+    println("vb(\"Vanbo\", 2): ${vb("Vanbo", 2)}")
+
+    println("0.zero(): ${0.zero()}")
+    println("10.one(10): ${10.one(10)}")
+    println("20.two(10, 10): ${20.two(10, 10)}")
+    println("30.three(10, 10, 10): ${30.three(10, 10, 10)}")
+
+    println("f1 { aa, bb -> aa.af() + bb.bf() }: ${f1 { aa, bb -> aa.af() + bb.bf() }}")
+    println("f2 { af() + it.bf() }: ${f2 { af() + it.bf() }}")
+
+    unitReturn { "Test" + "Case" }
+    unitReturn { 1 }
+    unitReturn { }
+
+    nonUnitReturn { "Test" + "Case2" }
+//    nonUnitReturn { 1 }
+//    nonUnitReturn {  }
+
+    println("\"hello\".transform1(5, duplicate).transform2(3, alternate): ${"hello".transform1(5, duplicate).transform2(3, alternate)}")
+    println("\"hello\".transform2(5, duplicate).transform1(3, alternate): ${"hello".transform2(5, duplicate).transform1(3, alternate)}")
+
+    println("74.d1(::f1): ${74.d1(::f1)}")
+    println("74.d2(::f1): ${74.d2(::f1)}")
+    println("74.d1(Int::f2): ${74.d1(Int::f2)}")
+    println("74.d2(Int::f2): ${74.d2(Int::f2)}")
+
+
+    val b: Base79 = Derived79()
+    println("b.g(): ${b.g()}")
+    println("b.h { f() }: ${b.h { f() }}")
+
+    println("exec(10, 2, fun Int.(d: Int): Boolean {\n" +
+            "        return this % d == 0\n" +
+            "    }): = ${exec(10, 2, fun Int.(d: Int): Boolean {
+                return this % d == 0
+            })}")
+
+    println("messy(): ${messy()}")
+    println("clean(): ${clean()}")
+    println("cleaner(): ${cleaner()}")
+
+    val pbj = sandwich {
+        add(PeanutButter())
+        add(GrapeJelly())
+    }
+
+    val hamAndSwiss = sandwich {
+        add(Ham())
+        add(Swiss())
+        add(Mustard())
+        grill()
+    }
+
+    println("pbj: ${pbj}")
+    println("hamAndSwiss: ${hamAndSwiss}")
+
+}
+
+open class Recipe : ArrayList<RecipeUnit>()
+
+open class RecipeUnit {
+    override fun toString() = "${this::class.simpleName}"
+}
+
+open class Operation : RecipeUnit()
+class Toast : Operation()
+class Grill : Operation()
+class Cut : Operation()
+
+open class Ingredient : RecipeUnit()
+class Bread : Ingredient()
+class PeanutButter : Ingredient()
+class GrapeJelly : Ingredient()
+class Ham : Ingredient()
+class Swiss : Ingredient()
+class Mustard : Ingredient()
+
+open class Sandwich : Recipe() {
+    fun action(op: Operation): Sandwich {
+        add(op)
+        return this
+    }
+
+    fun grill() = action(Grill())
+    fun toast() = action(Toast())
+    fun cut() = action(Cut())
+
+}
+
+fun sandwich(fillings: Sandwich.() -> Unit): Sandwich {
+    val sandwich = Sandwich()
+    sandwich.add(Bread())
+    sandwich.toast()
+    sandwich.fillings()
+    sandwich.cut()
+    return sandwich
+}
