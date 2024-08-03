@@ -1,4 +1,4 @@
-//open class Transport
+package my_interface//open class Transport
 
 sealed class Transport
 

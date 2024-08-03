@@ -1,3 +1,3 @@
-import SealedSubclass
-
-class ThirdLevel : SealedSubclass()
+//import SealedSubclass
+//
+//class ThirdLevel : SealedSubclass()

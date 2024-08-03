@@ -11,9 +11,15 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
+    testImplementation("org.junit.platform:junit-platform-launcher")
+    testImplementation("org.junit.platform:junit-platform-engine")
+
 
     implementation(kotlin("stdlib"))
     implementation(kotlin("reflect"))
+
+    implementation("org.slf4j:slf4j-api:2.0.7")
+    implementation("org.slf4j:slf4j-simple:2.0.7")
 }
 
 tasks.test {
