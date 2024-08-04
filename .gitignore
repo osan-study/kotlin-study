@@ -44,3 +44,6 @@ bin/
 ####
 *.pdf
 .idea
+
+
+DataFiles/
