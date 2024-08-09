@@ -287,3 +287,351 @@ class Box<out T> (private var content: T) {} // 공변성
 
 # Atomic 82 연산자 오버로딩 
 
+> 연산자 오버로딩을 사용하면 새로 만든 타입에 대해 + 같은 연산자에 의미를 부여하거나 기존 타입에
+> 대해 작용하는 연산자에 추가로 의미를 부여할 수 있다 .
+> 
+
+```kotlin
+data class Num(val n: Int)
+
+operator fun Num.plus(rval: Num) = Num(n + rval.n)
+
+fun main() {
+    println(Num(5) + Num(4))
+}
+```
+
+plus 말고도 지정된 다양한 키워드를 통해서 사용 가능하며, 대부분의 연산자들은 이미 infix 키워드를 붙이지 않아도
+이미 infix로 되어있어 굳이 사용하지 않아도 특정 operator 로 사용 가능하다.
+( + 기호 외에도 plus()함수를 직접덕으로 호출 가능하다.)
+
+---
+
+## 동등성 
+
+동등성(==) 과 비동등성(!=) 은 equals() 멤버 함수를 호출한다. data 키워드로 생성된 클래스의 경우
+저장된 필드 기준으로 모두 비교하는 equals()를 오버라이드 해준다. 하지만 data클래스가
+아닌 클래스에서는 따로 오버라이드 하지 않으면 내용이 아닌 참조를 비교하는 디폴트 비교가 수행된다.
+
+Kotlin 에서의 equals() 함수는 확장 함수로 정의할 수 없는 유일한 연산자이다.
+해당 함수는 반드시 멤버 함수로 오버라이드 되어야 한다.
+
+
+```kotlin
+class E(var v : Int) {
+    
+    override fun equals(other: Any?): Boolean = when {
+        this === other -> true
+        other !is E -> false
+        else -> v == other.v
+     }
+    
+    override fun hashCode(): Int = v
+    override fun toString(): String = "E($v)"
+}
+
+fun main() {
+    val a = E(1)
+    val b = E(2)
+
+    println(a == b) // false - a.equals(b)
+    println(a != b) // true - !a.equals(b)
+    
+    //참조 동등성 
+    println(E(3) === E(3)) // false
+}
+```
+
+equals()를 오버라이드할떄는 항상 hashCode()도 오버라이드 해야 한다. 기본적인 규칙은 Java도 동일하지만
+두 객체가 같다면 무조건 hashCode()도 동일한 값을 내놓아야 한다는 규칙이다. 해당 규칙이
+지켜지지 않는다면 Map, Set같은 곳에서 제대로 동작하지 않는 경우가 밸생한다.
+
+툴에서 제공하는 권장은 자동으로 생성해주는 기능을 활용하여 생성하길 권장한다.
+
+
+## 산술 연산자
+
+위에 나와있는 + 와 같이 이미 operator로 구현된 내용에 대해서 종류를 설명이라 패스. 도서 P519 에 다양하게 제공.
+
+다만 보고 넘어갈것은 해당 연산자우선순위는 고정되어있고 내장 타입이나 커스텀 타입에서도 모두 동일하게 동작한다. 
+
+---
+
+### 연산자 관련된 내용은 비슷하여 패스
+
+---
+
+## 호출 연산자 
+
+객체 참조뒤에 괄호를 넣으면 invoke()를 호출한다. 따라서 invoke() 연산자는 객체의 함수처럼 
+동작하게 만든다. invoke()가 받을 수 있는 파라미터 개수는 우리가 마음대로 정할 수 있다 .
+
+```kotlin
+class Func {
+    operator fun invoke() = "invoke()"
+    operator fun invoke(i: Int) = "invoke(${i})"
+}
+
+fun main() {
+
+    val func = Func()
+    println(func())
+    println(func(5))
+    println(func.invoke())
+    println(func.invoke(10))
+}
+
+```
+
+## 역 작은따옴표로 감싼 함수 이름 
+
+코틀린은 역작은따옴표(뺵틱) 을 사용하여 감싸는 경우 함수이름에 공백, 몇몇 비표준 글자, 예약어등을
+사용하는것을 허용한다.
+
+```kotlin
+fun `A_B_C_D_E_F_G`() = "A_B_C_D_E_F_G"
+fun `이 게 된 다 고 ?`() = "이 게 된 다 고 ?"
+
+fun main() {
+    
+    // 됩니다..
+    println(`이 게 된 다 고 ?`())
+}
+```
+
+위와 같이 사용도 가능하지만 테스트에 대해 자세히 설명하는 읽기 쉬운 테스트 함수를 정의하기는 좋지만
+실제 프로덕션 코드에는 사용하지 않는것을 권장한다.
+
+복잡하게 infix 까지 섞어 쓰면 오히려 읽는사람은 이해하기 어려워 진다.
+
+---
+
+# Atomic 83 연산자 사용하기
+
+> 실전에서 연산자를 오버로드 하는 경우는 드물며, 보통 직접 라이브러리를 만들떄만 사용한다.
+
+
+kotlin 에서 `a += b` 는 plusAssign()을 호출한다. 하지만 읽기 전용 컬렉션에는 plusAssign()이 존재하지
+않기 때문에 코틀린은 `a += b`를 `a = a + b` 로 변경하여 plus()를 호출하게 된다. 다만 이때 plus()는 기존에 있는 
+컬렉션의 내용을 변경하는 것이 아닌 새로운 컬렉션을 생성한 후 리스트에 대한 var에 대입하게 된다.
+
+```kotlin
+//sample 
+
+fun main () {
+    var list = listOf(1,2)
+    val init = list
+    
+    list += 3 // list = list + 3
+    list.plus(4)
+    
+}
+```
+
+![img_2.png](img_2.png)
+
+![img_3.png](img_3.png)
+
+그러면 어떻게 해야 좋은 가이드일까 라고 생각해보면 var -> val 로 변경하면 된다. 읽기 전용으로 만든다면 
+애초에 `+=` 사용시 컴파일되지 못하게 막아준다. 따라서 val을 주로 사용하고 필요시 var을 사용하는 것을 권장한다.
+
+---
+
+## 구조분해연산자
+
+이미 앞서 나온내용으로 componentX()에 대한 내용입니다 .
+
+구조분해할당을 사용하기 위해서는 직접 component operator을 구현하거나 data 클래스를 생성하면 된다 .
+
+```kotlin
+
+class Sample (val x : Int, val y : Int) {
+    operator fun component1() : Int {
+        return x
+    }
+
+    operator fun component2() : Int {
+        return y
+    }
+}
+
+// 또는 
+
+// 컴파일러가 알아서 component 함수를 필드순서대로 생성해 준다. 
+data class Sample2(val x: Int, val y: Int)
+
+```
+
+---
+
+
+# Atomic 84 프로퍼티 위임 
+
+> by 키워드를 사용하면 프로퍼티를 위임과 연결한다 . 
+> 
+> 프로퍼티가 val(읽기전용)인 경우 위임 객체의 클래스에는 getValue()가 정의되어야 하며 var일 경우 getValue()와 setValue()함수가 정의
+> 되어있어야 한다.
+
+```kotlin
+class Readable(val i : Int) {
+
+    val value: String by BasicRead()
+}
+
+class BasicRead {
+    operator fun getValue(
+        r: Readable,
+        process: KProperty<*>
+    ) = "getValue ${r.i}"
+
+}
+
+fun main() {
+
+    val readable = Readable(15)
+    println(readable.value)
+}
+```
+
+해당 by키워드는 `프로퍼티 뒤에 by 를 지정하면 뒤에 나온 객체를 앞에있는 프로퍼티와 연결한다.`
+
+getValue는 대략적으로 
+```kotlin
+
+class BasicRead {
+    operator fun getValue(
+        r: Readable,
+        process: KProperty<*>
+    ) = "getValue ${r.i}"
+
+}
+```
+
+setValue는 총 3개의 파라미터를 전달 받는다.
+
+setValue의 첫번째, 두번째 파라미터는 getValue와 동일하며 세번째 값은 프로퍼티 초기화 식에서 프로퍼티에 설정하려고 하는 값을 의미한다.
+```kotlin
+
+class BasicRead {
+    operator fun setValue(
+        r: Readable,
+        process: KProperty<*>
+        s: String
+    ) = "getValue ${r.i}"
+
+}
+```
+
+getValue()와 setValue()는 확장함수로도 선언이 가능하다
+
+```kotlin
+class Readable(val i : Int) {
+
+    val value: Int by BasicRead()
+}
+
+class BasicRead
+
+operator fun BasicRead.getValue(
+    r: Readable,
+    process: KProperty<*>
+) = r.i
+
+fun main() {
+
+    val readable = Readable(15)
+    println(readable.value)
+}
+```
+
+---
+
+
+# Atomic 85 프로퍼티 위임 도구
+
+```kotlin
+class Driver (map: MutableMap<String, Any?>) {
+
+    var name: String by map
+}
+
+
+fun main() {
+
+    val mutableMapOf: MutableMap<String, Any?> = mutableMapOf<String, Any?>()
+    mutableMapOf.put("name", "HELLO")
+
+    val driver = Driver(mutableMapOf)
+    println(driver.name)
+
+}
+```
+위와 같이 작성하면 프로퍼티 이름에 맞는 필드에 해당 값을 위임한다. 
+
+어떻게 위임되는지는 샘플 코드로 설명하면 아래와 같다. 다만 실제로 이렇게 구현된것은 아니라 단순화한 내용이다
+
+```kotlin
+import kotlin.reflect.KProperty
+
+operator fun MutableMap<String, Any>.getValue(
+    thisRef: Any?, property: KProperty<*>
+) = this[property.name]
+
+operator fun MutableMap<String, Any>.setValue(
+    thisRef: Any?, property: KProperty<*>, value: Any
+) { this[property.name] = value }
+```
+
+
+# Atomic 86 지연 계산 초기화 
+> 지금까지는 프로퍼티를 생성자 안에서 초기화하거나 정의하는 시점에 초기화 하였고, 접근할때 마다 값을 계산하는 커스텀 게터를 정의하였다.
+
+세번쨰 방법으로는 지연계산 초기화이다.
+
+- 복잡하고 시간이 오래걸리는 계산
+- 네트워크 요청
+- 데이터베이스 접근
+
+위와 같이 해당 프로퍼티를 생성시점에 초기화하는 경우 두가지 문제를 야기한다
+
+ - 애플리케이션 초기 시작 시간이 길어진다.
+ - 사용하지 않거나 나중에 계산해도 되지만 프로퍼티 값을 계산하기 위해 불필요한 작업을 수행한다.
+
+이러한 경우 해당 프로퍼티 뒤에 `by lazy` 키워드를 통해 초기화 코드를 뒤에 작성하면 사용 시점에 초기화가 실행된다.
+
+개인적으로 지연계산 초기화라던지, 늦은 초기화는 사용하지 않는편이다... (의견 궁금)
+
+
+# Atomic 87 늦은 초기화
+
+`lateinit` 키워드를 사용하면 인스턴스가 생성된 다음에 프로퍼티를 초기화 할 수 있다.
+
+제약 사항 
+ - var 프로퍼티에만 적용 가능 , val에는 적용 불가
+ - 프로퍼티의 타입은 널이 아닌 타입이어야 한다
+ - 프로퍼티가 원시 타입의 값이 아니어야 한다
+ - 추상 클래스의 추상 프로퍼티나 인스턴스의 프로퍼티에 lateinit을 적용할 수 없다.
+ - 커스텀 게터 및 세터를 지원하는 프로퍼티에는 lateinit 적용할 수 없다/
+
+
+```kotlin
+
+class BB {
+    lateinit var items: String
+
+    fun setup() {
+        items = "abcde"
+    }
+
+    fun check() = "tt" in items
+}
+
+fun main() {
+
+    val bb = BB()
+    bb.setup()
+    println(bb.check())
+}
+```
+늦은 초기화를 사용할때 기본적으로 초기화 함수를 호출하지 않고 진행된다면 오류가 나거나 경고메세지를 볼 수있다. 그래서 .isInitialized 사용을 통해
+해당 필드가 초기화되었는지 판단해주는 함수를 제공하며 해당 함수는 lateinit으로 선언된 필드여야지만 확인 가능하다.
